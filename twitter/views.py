@@ -14,7 +14,19 @@ def profile_list(request):
     
 def profile(request, pk):
     if request.user.is_authenticated:
-        profile = get_object_or_404(Profile, user_id=pk)  # Use get_object_or_404 for better error handling
+        profile = get_object_or_404(Profile, user_id=pk) 
+        
+        if request.method == "POST":
+            curr_user_profile = request.user.profile
+            action = request.POST['follow']
+            
+            if action == "unfollow":
+                curr_user_profile.follows.remove(profile)
+            elif action == "follow":
+                curr_user_profile.follows.add(profile)
+            curr_user_profile.save()
+                
+        
         return render(request, "profile.html", {"profile": profile})
     else:
         return handle_unauthenticated_request(request)
