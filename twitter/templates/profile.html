@@ -3,9 +3,28 @@
   <div class="row">
     <div class="col-8">
       <h1>{{ profile.user.username }}'s Profile</h1>
-    </div>
+    
+      <br><br>
+      
+      {% if tweets %}
+        <div style="text-align: left;">
+            {% for tweet in tweets %}
+            <div class="card text-bg-light">
+                <div class="card-body " >
+                  <blockquote class="blockquote mb-0">
+                    <p>{{tweet.body}}</p>
+                    <footer class="blockquote-footer"><i>@{{tweet.user|lower}}</i></footer>
+                  </blockquote>
+                </div>
+              </div>
+                <br><br>
+            {% endfor %}
+          </div>
+        {% endif %}
+</div>
 
-    <div class="col-4">
+    <div class="col-3 ms-auto">
+      <br><br><br><br>
       <div class="card">
         <h5 class="card-header">Following</h5>
         <div class="card-body">

@@ -2,6 +2,19 @@
 
 
 {% block content %}
-<h1>Tweets</h1>
+<h1>Tweets</h1><br>
 
+{% for tweet in tweets %}
+<div class="card text-bg-light">
+    
+    <div class="card-body " >
+      <blockquote class="blockquote mb-0">
+        <p>{{tweet.body}}</p>
+        <footer class="blockquote-footer"><i>@{{tweet.user|lower}}</i></footer>
+      </blockquote>
+    </div>
+  </div>
+    <br><br>
+{% endfor %}
+    
 {% endblock content %}

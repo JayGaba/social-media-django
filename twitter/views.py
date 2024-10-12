@@ -1,9 +1,12 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib import messages
-from .models import Profile
+from .models import Profile, Tweet
 
 def home(request):
-    return render(request, 'home.html', {})
+    if request.user.is_authenticated:
+        tweets = Tweet.objects.all().order_by("-created_at")
+        
+    return render(request, 'home.html', {"tweets":tweets})
 
 def profile_list(request):
     if request.user.is_authenticated:
@@ -15,6 +18,7 @@ def profile_list(request):
 def profile(request, pk):
     if request.user.is_authenticated:
         profile = get_object_or_404(Profile, user_id=pk) 
+        tweets = Tweet.objects.filter(user_id=pk).order_by("-created_at")
         
         if request.method == "POST":
             curr_user_profile = request.user.profile
@@ -27,7 +31,7 @@ def profile(request, pk):
             curr_user_profile.save()
                 
         
-        return render(request, "profile.html", {"profile": profile})
+        return render(request, "profile.html", {"profile": profile, "tweets":tweets})
     else:
         return handle_unauthenticated_request(request)
 
