@@ -2,6 +2,7 @@ from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib import messages
 from .models import Profile, Tweet
 from .forms import TweetForm
+from django.contrib.auth import authenticate, login, logout
 
 def home(request):
     if request.user.is_authenticated:
@@ -52,3 +53,11 @@ def profile(request, pk):
 def handle_unauthenticated_request(request):
     messages.error(request, "You must be logged in to view this page.")
     return redirect('home')
+
+
+def login_user(request):
+    return render(request, "login.html", {})
+
+
+def logout_user(request):
+    pass
