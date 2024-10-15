@@ -67,14 +67,22 @@
                     Unfollow @{{ profile.user.username|lower }}
                 </button>
             {% else %}
+            {% if request.user.id != profile.user.id %}
                 <button class="btn btn-outline-success" name="follow" value="follow" type="submit">
                     Follow @{{ profile.user.username|lower }}
                 </button>
+              
+            {% endif %}
             {% endif %}
                 
 
         </form>
 <br/>
+
+{% if request.user.id == profile.user.id %}
+  <a href="{% url 'update_user' %}" class="btn btn-outline-primary">Update Profile</a> 
+{% endif %}
+  
   </div>       
               
   </div>

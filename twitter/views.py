@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from .models import Profile, Tweet
-from .forms import TweetForm, SignUpForm
-from django.contrib.auth import authenticate, login, logout
+from .forms import TweetForm, SignUpForm, UserUpdateForm
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 from django import forms
 
 def home(request):
@@ -84,4 +85,22 @@ def register_user(request):
             return redirect('home')
         
     return render(request, "register.html", {'form':form})
- 
+
+def update_user(request):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            form = UserUpdateForm(request.POST, instance=request.user)
+            if form.is_valid():
+                user = form.save()
+                if form.cleaned_data.get('password'):
+                    update_session_auth_hash(request, user)
+                messages.success(request, "Your profile has been updated successfully!")
+                return redirect('home')
+            else:
+                messages.error(request, "There was an error updating your profile. Please check the form and try again.")
+        else:
+            form = UserUpdateForm(instance=request.user)
+        
+        return render(request, "update_user.html", {"form": form})
+    else:
+        return handle_unauthenticated_request(request)
