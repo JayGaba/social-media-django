@@ -1,63 +1,80 @@
-{% extends 'base.html' %} {% block content %} {% if profile %}
-<div class="container text-center">
-  <div class="row">
-    <div class="col-8">
-      <h1>{{ profile.user.username }}'s Profile</h1>
-    
-      <br><br>
+{% extends 'base.html' %} 
+{% load static %}
+{% block content %} 
+{% if profile %}
+  <div class="container text-center">
+    <div class="row">
+      <div class="col-8">
+        <h1>{{ profile.user.username }}'s Profile</h1>
       
-      {% if tweets %}
-        <div style="text-align: left;">
-            {% for tweet in tweets %}
-            <div class="card text-bg-light">
-                <div class="card-body " >
-                  <blockquote class="blockquote mb-0">
-                    <p>{{tweet.body}}</p>
-                    <footer class="blockquote-footer"><i>@{{tweet.user|lower}} at {{tweet.created_at }}</i></footer>
-                  </blockquote>
+        <br><br>
+        
+        {% if tweets %}
+          <div style="text-align: left;">
+              {% for tweet in tweets %}
+              <div class="card text-bg-light">
+                  <div class="card-body " >
+                    <blockquote class="blockquote mb-0">
+                      <p>{{tweet.body}}</p>
+                      <footer class="blockquote-footer"><i>@{{tweet.user|lower}} at {{tweet.created_at }}</i></footer>
+                    </blockquote>
+                  </div>
                 </div>
-              </div>
-                <br><br>
-            {% endfor %}
-          </div>
-        {% endif %}
-</div>
-
-    <div class="col-3 ms-auto">
-      <br><br><br><br>
-      <div class="card">
-        <h5 class="card-header">Following</h5>
-        <div class="card-body">
-          <p class="card-text">
-            {% if profile.follows.exists %}
-                {% for following in profile.follows.all %}
-                <a href="{% url 'profile' following.user.id %}">
-                @{{ following }}<br
-                /></a>
-                {% endfor %} 
-            {% else %}
-                <strong>Follow someone!</strong>
-            {% endif %}
-            </p>
-        </div>
-      </div>
-        <br /><br />
-        <div class="card">
-            <h5 class="card-header">Followed By</h5>
-            <div class="card-body">
-            <p class="card-text">
-                {% if profile.followed_by.exists %}
-                <strong>Followed By</strong><br />
-                {% for following in profile.followed_by.all %}
-                <a href="{% url 'profile' following.user.id %}">
-                @{{ following }}<br
-                /></a>
-                {% endfor %} {% else %}
-                <strong>Noone follows you lmao!</strong>
-                {% endif %}
-                </p>
+                  <br><br>
+              {% endfor %}
             </div>
-        </div>
+          {% endif %}
+  </div>
+
+  <div class="col-3 ms-auto">
+    <br><br>
+    
+    {% if profile.profile_image %}
+  <div style="width: 150px; height: 150px; overflow: hidden; border-radius: 50%; display: inline-block; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);">
+    <img src="{{ profile.profile_image.url }}" alt="Profile photo" style="width: 100%; height: 100%; object-fit: cover; object-position: center; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.1)';" onmouseout="this.style.transform='scale(1)';">
+  </div>
+{% else %}
+  <div style="width: 150px; height: 150px; overflow: hidden; border-radius: 50%; display: inline-block; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);">
+    <img src="{% static 'images/pic.png' %}" alt="Default profile photo" style="width: 100%; height: 100%; object-fit: cover; object-position: center; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.1)';" onmouseout="this.style.transform='scale(1)';">
+  </div>
+{% endif %}
+
+
+      
+    <br><br>
+    <div class="card">
+      <h5 class="card-header">Following</h5>
+      <div class="card-body">
+        <p class="card-text">
+          {% if profile.follows.exists %}
+              {% for following in profile.follows.all %}
+              <a href="{% url 'profile' following.user.id %}">
+              @{{ following }}<br
+              /></a>
+              {% endfor %} 
+          {% else %}
+              <strong>Follow someone!</strong>
+          {% endif %}
+          </p>
+      </div>
+    </div>
+      <br /><br />
+      <div class="card">
+          <h5 class="card-header">Followed By</h5>
+          <div class="card-body">
+          <p class="card-text">
+              {% if profile.followed_by.exists %}
+              <strong>Followed By</strong><br />
+              {% for following in profile.followed_by.all %}
+              <a href="{% url 'profile' following.user.id %}">
+              @{{ following }}<br
+              /></a>
+              {% endfor %} {% else %}
+              <strong>Noone follows you lmao!</strong>
+              {% endif %}
+              </p>
+          </div>
+      </div>
 <br>
         <form method=POST>
             {% csrf_token %}
