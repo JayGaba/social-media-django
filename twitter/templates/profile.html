@@ -10,20 +10,41 @@
         <br><br>
         
         {% if tweets %}
-          <div style="text-align: left;">
-              {% for tweet in tweets %}
-              <div class="card text-bg-light">
-                  <div class="card-body " >
-                    <blockquote class="blockquote mb-0">
-                      <p>{{tweet.body}}</p>
-                      <footer class="blockquote-footer"><i>@{{tweet.user|lower}} at {{tweet.created_at }}</i></footer>
-                    </blockquote>
-                  </div>
-                </div>
-                  <br><br>
-              {% endfor %}
+  <div style="text-align: left;">
+    {% for tweet in tweets %}
+      <div class="card text-bg-light mb-3" 
+           style="border-radius: 15px; overflow: hidden;">
+        <div class="row g-0 flex-column flex-md-row">
+          <div class="col-auto">
+            <div style="width: 100px; height: 100px; overflow: hidden; 
+                        border-top-left-radius: 15px; border-bottom-left-radius: 15px;">
+              {% if profile.profile_image %}
+                <img src="{{ profile.profile_image.url }}" 
+                     class="img-fluid h-100 w-100" 
+                     style="object-fit: cover;">
+              {% else %}
+                <img src="{% static 'images/pic.png' %}" 
+                     class="img-fluid h-100 w-100" 
+                     style="object-fit: cover;">
+              {% endif %}
             </div>
-          {% endif %}
+          </div>
+          <div class="col">
+            <div class="card-body">
+              <blockquote class="blockquote mb-0">
+                <p>{{ tweet.body }}</p>
+                <footer class="blockquote-footer">
+                  <i>@{{ tweet.user|lower }} at {{ tweet.created_at }}</i>
+                </footer>
+              </blockquote>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
+
   </div>
 
   <div class="col-3 ms-auto">

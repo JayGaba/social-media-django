@@ -1,35 +1,58 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block content %}
-<div class="container-fluid">
+<div class="container-fluid" style="padding: 20px;">
     <div class="row">
-        <div class="col-8">
+        <div class="col-md-8">
             <h1 class="text-center">Tweets</h1><br>
 
-            {% for tweet in tweets %}
-            <div class="card text-bg-light mb-4" style="text-align: left;">
-                <div class="card-body">
-                    <blockquote class="blockquote mb-0">
-                        <p>{{tweet.body}}</p>
-                        <footer class="blockquote-footer"><i>@{{tweet.user|lower}} at {{tweet.created_at }}</i></footer>
-                    </blockquote>
+            <div style="text-align: left;">
+                {% for tweet in tweets %}
+                <div class="card text-bg-light mb-3" style="border-radius: 15px; overflow: hidden; margin-bottom: 20px; display: flex; flex-direction: column;">
+                    <div class="row g-0">
+                        <div class="col-auto">
+                            <div style="width: 100px; height: 100px; overflow: hidden; border-top-left-radius: 15px; border-bottom-left-radius: 15px;">
+                                {% if tweet.user.profile.profile_image %}
+                                    <img src="{{ tweet.user.profile.profile_image.url }}" 
+                                        class="img-fluid" 
+                                        style="width: 100%; height: 100%; object-fit: cover;">
+                                {% else %}
+                                    <img src="{% static 'images/pic.png' %}" 
+                                        class="img-fluid" 
+                                        style="width: 100%; height: 100%; object-fit: cover;">
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card-body" style="display: flex; flex-direction: column; justify-content: center;">
+                                <blockquote class="blockquote mb-0">
+                                    <p>{{ tweet.body }}</p>
+                                    <footer class="blockquote-footer" style="font-size: 0.9em;">
+                                        <a href="{% url 'profile' tweet.user.id %}"> 
+                                            <i>@{{ tweet.user.username|lower }}</i>
+                                        </a>
+                                        <i> at {{ tweet.created_at }}</i>
+                                    </footer>
+                                </blockquote>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+                {% endfor %}
             </div>
-            {% endfor %}
         </div>
         
         {% if form %}
-            <div class="col-4"><br><br><br>    
+            <div class="col-md-4" style="padding-top: 60px;">    
                 <form method="POST">
                     {% csrf_token %}
-                    {{ form.as_p }}
-                    
+                    <div class="form-group">
+                        {{ form.as_p }}
+                    </div>
                     <button type="submit" class="btn btn-primary">Tweet!</button>
                 </form>
             </div>
-            
         {% endif %}
-            
     </div>
 </div>
 {% endblock content %}

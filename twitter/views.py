@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from .models import Profile, Tweet
-from .forms import TweetForm, SignUpForm, UserUpdateForm
+from .forms import TweetForm, SignUpForm, UserUpdateForm, ProfilePicForm
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
@@ -24,7 +24,7 @@ def home(request):
 
 def profile_list(request):
     if request.user.is_authenticated:
-        profiles = Profile.objects.exclude(user=request.user)
+        profiles = Profile.objects.exclude(user=request.user).order_by("-date_modified")
         return render(request, 'profile_list.html', {"profiles": profiles})
 
     return handle_unauthenticated_request(request)
@@ -90,8 +90,10 @@ def update_user(request):
     if request.user.is_authenticated:
         if request.method == "POST":
             form = UserUpdateForm(request.POST, instance=request.user)
-            if form.is_valid():
+            profile_pic_form = ProfilePicForm(request.POST, request.FILES, instance=request.user.profile)
+            if form.is_valid() and profile_pic_form.is_valid():
                 user = form.save()
+                profile_pic_form.save()
                 if form.cleaned_data.get('password'):
                     update_session_auth_hash(request, user)
                 messages.success(request, "Your profile has been updated successfully!")
@@ -100,7 +102,8 @@ def update_user(request):
                 messages.error(request, "There was an error updating your profile. Please check the form and try again.")
         else:
             form = UserUpdateForm(instance=request.user)
+            profile_pic_form = ProfilePicForm(instance=request.user.profile)
         
-        return render(request, "update_user.html", {"form": form})
+        return render(request, "update_user.html", {"form": form, "profile_pic_form": profile_pic_form})
     else:
         return handle_unauthenticated_request(request)
