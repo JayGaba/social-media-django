@@ -1,115 +1,103 @@
 <div class="like-dislike-container">
     <label for="dislike-{{ tweet.id }}">
-      <input 
-        type="radio" 
-        name="evaluation-{{ tweet.id }}" 
-        id="dislike-{{ tweet.id }}" 
-      />
-      <svg class="icon dislike" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-        <path d="M20 3H6.693A2.01 2.01 0 0 0 4.82 4.298l-2.757 7.351A1 1 0 0 0 2 12v2c0 1.103.897 2 2 2h5.612L8.49 19.367a2.004 2.004 0 0 0 .274 1.802c.376.52.982.831 1.624.831H12c.297 0 .578-.132.769-.36l4.7-5.64H20c1.103 0 2-.897 2-2V5c0-1.103-.897-2-2-2zm-8.469 17h-1.145l1.562-4.684A1 1 0 0 0 11 14H4v-1.819L6.693 5H16v9.638L11.531 20zM18 14V5h2l.001 9H18z"></path>
-      </svg>
+        <a href="{% url 'tweet_like' tweet.id %}">
+        <input
+            type="radio"
+            name="evaluation-{{ tweet.id }}"
+            id="dislike-{{ tweet.id }}"
+            {% if request.user in tweet.dislikes.all %}checked{% endif %}
+        />
+        <svg class="icon dislike" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <path d="M20 3H6.693A2.01 2.01 0 0 0 4.82 4.298l-2.757 7.351A1 1 0 0 0 2 12v2c0 1.103.897 2 2 2h5.612L8.49 19.367a2.004 2.004 0 0 0 .274 1.802c.376.52.982.831 1.624.831H12c.297 0 .578-.132.769-.36l4.7-5.64H20c1.103 0 2-.897 2-2V5c0-1.103-.897-2-2-2zm-8.469 17h-1.145l1.562-4.684A1 1 0 0 0 11 14H4v-1.819L6.693 5H16v9.638L11.531 20zM18 14V5h2l.001 9H18z"></path>
+        </svg>
+    </a>
     </label>
 
     <div class="count">
-      <span>{{ tweet.number_of_likes }}</span>
+        <span>{{ tweet.number_of_likes }}</span>
     </div>
 
     <label for="like-{{ tweet.id }}">
         <a href="{% url 'tweet_like' tweet.id %}">
-
-      <input 
-        type="radio" 
-        name="evaluation-{{ tweet.id }}" 
-        id="like-{{ tweet.id }}" 
-        {% if request.user in tweet.likes.all %}checked{% endif %} 
-      />
-      <svg class="icon like" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-        <path d="M20 8h-5.612l1.123-3.367c.202-.608.1-1.282-.275-1.802S14.253 2 13.612 2H12c-.297 0-.578.132-.769.36L6.531 8H4c-1.103 0-2 .897-2 2v9c0 1.103.897 2 2 2h13.307a2.01 2.01 0 0 0 1.873-1.298l2.757-7.351A1 1 0 0 0 22 12v-2c0-1.103-.897-2-2-2zM4 10h2v9H4v-9zm16 1.819L17.307 19H8V9.362L12.468 4h1.146l-1.562 4.683A.998.998 0 0 0 13 10h7v1.819z"></path>
-      </svg></a>
+        <input
+            type="radio"
+            name="evaluation-{{ tweet.id }}"
+            id="like-{{ tweet.id }}"
+            {% if request.user in tweet.likes.all %}checked{% endif %}
+        />
+        <svg class="icon like" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <path d="M20 8h-5.612l1.123-3.367c.202-.608.1-1.282-.275-1.802S14.253 2 13.612 2H12c-.297 0-.578.132-.769.36L6.531 8H4c-1.103 0-2 .897-2 2v9c0 1.103.897 2 2 2h13.307a2.01 2.01 0 0 0 1.873-1.298l2.757-7.351A1 1 0 0 0 22 12v-2c0-1.103-.897-2-2-2zM4 10h2v9H4v-9zm16 1.819L17.307 19H8V9.362L12.468 4h1.146l-1.562 4.683A.998.998 0 0 0 13 10h7v1.819z"></path>
+        </svg></a>  
     </label>
 </div>
 
 
+
 <style>
   .like-dislike-container {
-  --col-gray: #b4b4b4;
-  --col-white: #4b4b4b;
-  --col-like: #2196f3;
-  --col-dislike: #ff3232;
-  --transition: 350ms;
-  background-color: var(--col-gray);
-  width: 100px; 
-  border-radius: 50px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 5px; 
-  user-select: none;
+    --col-gray: #b4b4b4;
+    --col-white: #4b4b4b;
+    --col-like: #2196f3;
+    --col-dislike: #ff3232;
+    --transition: 350ms;
+    background-color: var(--col-gray);
+    width: 100px;
+    border-radius: 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+    user-select: none;
 }
 
-.like-dislike-container .count {
-  flex: 1;
-  text-align: center;
-  color: var(--col-white);
-  font-size: 12px; /* Reduced font size */
-  font-weight: bold;
-}
-
-
-  .like-dislike-container label input {
+.like-dislike-container label input {
     display: none;
-  }
+}
 
-  .like-dislike-container .icon {
+.like-dislike-container .icon {
     cursor: pointer;
     fill: var(--col-white);
     width: 24px;
     height: 24px;
-  }
+    transition: fill var(--transition);
+}
 
-  .like-dislike-container .count {
-    flex: 1;
-    text-align: center;
-    color: var(--col-white);
-    font-size: 14px;
-    font-weight: bold;
-  }
-
-  .like-dislike-container:has(#like-{{ tweet.id }}:checked) .icon.like {
+/* Blue color for like when selected */
+input#like-{{ tweet.id }}:checked + svg.like {
     fill: var(--col-like);
-  }
+}
 
-  .like-dislike-container:has(#dislike-{{ tweet.id }}:checked) .icon.dislike {
+/* Red color for dislike when selected */
+input#dislike-{{ tweet.id }}:checked + svg.dislike {
     fill: var(--col-dislike);
-  }
+}
 
-  @keyframes evaluation-animation {
+/* Animation effect */
+@keyframes evaluation-animation {
     0%, 100% {
-      transform: scale(1) rotate(0deg);
+        transform: scale(1) rotate(0deg);
     }
     50% {
-      transform: scale(1.1) rotate(-10deg);
+        transform: scale(1.1) rotate(-10deg);
     }
-  }
+}
 
-  .like-dislike-container label:has(input:checked) .icon {
-    animation: evaluation-animation 0.5s ease;
-  }
-  .like-dislike-container .icon.active {
+label input:checked + svg {
     animation: evaluation-animation 0.5s ease;
 }
+
 </style>
 <script>
     document.querySelectorAll('.like-dislike-container label a').forEach(link => {
-    link.addEventListener('click', function (event) {
-        event.preventDefault(); 
+        link.addEventListener('click', function (event) {
+            event.preventDefault(); 
 
-        const svg = this.querySelector('svg.icon.like');
-        svg.classList.add('active'); 
+            const svg = this.querySelector('svg.icon'); 
+            svg.classList.add('active'); 
 
-        setTimeout(() => {
-            window.location.href = this.href;
-        }, 300);
+            setTimeout(() => {
+                window.location.href = this.href; 
+            }, 250);
+        });
     });
-});
 </script>

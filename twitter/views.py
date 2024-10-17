@@ -115,6 +115,14 @@ def tweet_like(request, pk):
             tweet.likes.remove(request.user)
         else:
             tweet.likes.add(request.user)
-        return redirect('home')   
+        return redirect(request.META.get("HTTP_REFERER"))   
+    else:
+        return handle_unauthenticated_request(request)
+    
+def view_tweet(request, pk):
+    tweet = get_object_or_404(Tweet, id=pk)
+    
+    if tweet:
+        return render(request, "view_tweet.html", {'tweet':tweet})
     else:
         return handle_unauthenticated_request(request)
