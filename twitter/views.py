@@ -107,3 +107,14 @@ def update_user(request):
         return render(request, "update_user.html", {"form": form, "profile_pic_form": profile_pic_form})
     else:
         return handle_unauthenticated_request(request)
+
+def tweet_like(request, pk):
+    if request.user.is_authenticated:
+        tweet = get_object_or_404(Tweet, id=pk)
+        if tweet.likes.filter(id=request.user.id):
+            tweet.likes.remove(request.user)
+        else:
+            tweet.likes.add(request.user)
+        return redirect('home')   
+    else:
+        return handle_unauthenticated_request(request)

@@ -27,15 +27,21 @@
                             <div class="card-body" style="display: flex; flex-direction: column; justify-content: center;">
                                 <blockquote class="blockquote mb-0">
                                     <p>{{ tweet.body }}</p>
-                                    <footer class="blockquote-footer" style="font-size: 0.9em;">
-                                        <a href="{% url 'profile' tweet.user.id %}"> 
-                                            <i>@{{ tweet.user.username|lower }}</i>
-                                        </a>
-                                        <i> at {{ tweet.created_at }}</i>
+                                    <footer class="blockquote-footer" style="font-size: 0.9em; display: flex; justify-content: space-between; align-items: center;">
+                                        <div>
+                                            <a href="{% url 'profile' tweet.user.id %}"> 
+                                                <i>@{{ tweet.user.username|lower }}</i>
+                                            </a>
+                                            <i> at {{ tweet.created_at }}</i>
+                                        </div>
+                                        <div style="margin-left: auto;">
+                                            {% include 'components/like_dislike_widget.html' %}
+                                        </div>
                                     </footer>
                                 </blockquote>
                             </div>
                         </div>
+                        
                     </div>
                 </div>
                 {% endfor %}
