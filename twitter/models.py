@@ -25,7 +25,10 @@ class Profile(models.Model):
     
     date_modified = models.DateTimeField(User, auto_now=True)
     profile_image = models.ImageField(null=True, blank=True, upload_to="images/")
-    
+    profile_bio = models.CharField(null=True, blank=True, max_length=200)
+    website_link = models.CharField(null=True, blank=True, max_length=150)
+    instagram_link = models.CharField(null=True, blank=True, max_length=150)
+    linkedin_link = models.CharField(null=True, blank=True, max_length=150)
     def __str__(self):
        return self.user.username
     def can_follow(self, profile_to_follow):

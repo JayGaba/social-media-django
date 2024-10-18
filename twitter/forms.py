@@ -79,7 +79,13 @@ class UserUpdateForm(forms.ModelForm):
     
 class ProfilePicForm(forms.ModelForm):
     profile_image = forms.ImageField(label="Profile picture")
-    
+    profile_bio = forms.CharField(label="Bio", widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Profile Bio'}), required=False)
+    website_link = forms.CharField(label="Website Link", widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Website Link'}), required=False)
+    instagram_link = forms.CharField(label="Instagram Link", widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Instagram Link'}), required=False)
+    linkedin_link = forms.CharField(label="Linkedin Link", widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Linkedin Link'}), required=False)
+
     class Meta:
         model = Profile 
-        fields = ('profile_image',)
+        fields = ('profile_image', 'profile_bio', 'website_link', 'instagram_link', 'linkedin_link')
+        
+        

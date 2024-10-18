@@ -97,7 +97,7 @@ def update_user(request):
                 if form.cleaned_data.get('password'):
                     update_session_auth_hash(request, user)
                 messages.success(request, "Your profile has been updated successfully!")
-                return redirect('home')
+                return redirect('profile', pk=request.user.pk)
             else:
                 messages.error(request, "There was an error updating your profile. Please check the form and try again.")
         else:
