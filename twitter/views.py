@@ -135,3 +135,12 @@ def unfollow(request, pk):
         return redirect(request.META.get("HTTP_REFERER"))
     else:
         return handle_unauthenticated_request(request)
+
+def follow(request, pk):
+    if request.user.is_authenticated:
+        profile_to_unfollow = get_object_or_404(Profile, user_id=pk)
+        request.user.profile.follows.add(profile_to_unfollow)
+        messages.success(request, f"Successfully followed {profile_to_unfollow.user.username}!")
+        return redirect(request.META.get("HTTP_REFERER"))
+    else:
+        return handle_unauthenticated_request(request)
