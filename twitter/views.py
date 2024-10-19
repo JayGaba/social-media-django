@@ -126,3 +126,12 @@ def view_tweet(request, pk):
         return render(request, "view_tweet.html", {'tweet':tweet})
     else:
         return handle_unauthenticated_request(request)
+    
+def unfollow(request, pk):
+    if request.user.is_authenticated:
+        profile_to_unfollow = get_object_or_404(Profile, user_id=pk)
+        request.user.profile.follows.remove(profile_to_unfollow)
+        messages.success(request, f"Successfully unfollowed {profile_to_unfollow.user.username}!")
+        return redirect(request.META.get("HTTP_REFERER"))
+    else:
+        return handle_unauthenticated_request(request)
