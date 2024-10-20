@@ -47,6 +47,18 @@ def profile(request, pk):
     
     return handle_unauthenticated_request(request)
 
+def followers(request, pk):
+    if request.user.is_authenticated:
+        if request.user.id == pk:
+            profiles = Profile.objects.get(user_id=pk)
+            return render(request, 'followers.html', {"profiles": profiles})
+        else:
+           messages.error(request, "You can only view your followers!")
+           return redirect('home') 
+    else:
+        return handle_unauthenticated_request(request)
+
+
 def handle_unauthenticated_request(request):
     messages.error(request, "You must be logged in to view this page.")
     return redirect('login')

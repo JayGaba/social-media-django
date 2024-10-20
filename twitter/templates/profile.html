@@ -162,7 +162,7 @@
           <p class="card-text">
             {% if profile.followed_by.exists %}
               {% if profile == user.profile %}
-                {% for follower in profile.followed_by.all %}
+                {% for follower in profile.followed_by.all|slice:":3" %}
                   <a href="{% url 'profile' follower.user.id %}">
                   @{{ follower }}</a>&nbsp;
                   {% if follower not in user.profile.follows.all %}
@@ -173,15 +173,18 @@
                   <br>
                 {% endfor %}
               {% else %}
-                {% for following in profile.followed_by.all %}
-                  <a href="{% url 'profile' following.user.id %}">
-                  @{{ following }}</a><br>
+                {% for follower in profile.followed_by.all|slice:":3" %}
+                  <a href="{% url 'profile' follower.user.id %}">
+                  @{{ follower }}</a><br>
                 {% endfor %}
               {% endif %}
-            {% else %}
+              {% else %}
               <strong>No one follows you yet!</strong>
-            {% endif %}
-              </p>
+              {% endif %}
+            </p>
+          </div>
+          <div class="card-footer">
+            <a href="{% url 'followers' profile.user.id %}" style="color: grey;">See more...</a>
           </div>
       </div><br>
       {% if request.user.id == profile.user.id %}
