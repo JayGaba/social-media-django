@@ -136,7 +136,7 @@
         <p class="card-text">
           {% if profile.follows.exists %}
             {% if profile == user.profile %}
-              {% for following in profile.follows.all %}
+              {% for following in profile.follows.all|slice:":3" %}
                 <a href="{% url 'profile' following.user.id %}">
                 @{{ following }}</a>&nbsp;
                   <a href="{% url 'unfollow' following.user.id %}">
@@ -144,7 +144,7 @@
                   </a><br>
                 {% endfor %}
             {% else %}
-                {% for following in profile.follows.all %}
+                {% for following in profile.follows.all|slice:":3" %}
                   <a href="{% url 'profile' following.user.id %}">
                   @{{ following }}<br></a>
                 {% endfor %}
@@ -153,6 +153,9 @@
               <strong>Follow someone!</strong>
           {% endif %}
           </p>
+      </div>
+      <div class="card-footer">
+        <a href="{% url 'following' profile.user.id %}" class="btn tbn-sm btn-outline-secondary">See more...</a>
       </div>
     </div>
       <br />
@@ -184,7 +187,7 @@
             </p>
           </div>
           <div class="card-footer">
-            <a href="{% url 'followers' profile.user.id %}" style="color: grey;">See more...</a>
+            <a href="{% url 'followers' profile.user.id %}" class="btn tbn-sm btn-outline-secondary">See more...</a>
           </div>
       </div><br>
       {% if request.user.id == profile.user.id %}

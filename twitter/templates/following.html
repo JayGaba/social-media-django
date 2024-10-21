@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+<h1>{{ request.user.username }}'s Following</h1>
+<br/>
+
+{% if profiles %}
+    {% for profile in profiles.follows.all %}
+    <div class="card mb-3" style="max-width: 500px; height: 160px; overflow: hidden;">
+        <div class="row g-0">
+          <div class="col-md-4">
+            <div class="h-100">
+              {% if profile.profile_image %}
+                <img src="{{ profile.profile_image.url }}" class="img-fluid rounded-start h-100" style="object-fit: cover;">
+              {% else %}
+                <img src="{% static 'images/pic.png' %}" class="img-fluid rounded-start h-100" style="object-fit: cover;">
+              {% endif %}
+            </div>
+          </div>
+
+          <div class="col-md-8">
+            <div class="card-body">
+                <h5 class="card-title">
+                    {{ profile.user.username }}&nbsp;&nbsp;
+                    {% if user.is_authenticated %}
+                        {% if profile != user.profile %}
+                            {% if profile in user.profile.follows.all %}
+                                <a href="{% url 'unfollow' profile.user.id %}">
+                                    <i class="fa fa-user-minus small" style="color: grey;"></i>
+                                </a>
+                            {% else %}
+                                <a href="{% url 'follow' profile.user.id %}">
+                                    <i class="fa fa-user-plus small" style="color: grey;"></i>
+                                </a>
+                            {% endif %}
+                        {% endif %}
+                    {% endif %}
+                </h5>
+                <p class="card-text">
+                    <a href="{% url 'profile' profile.user.id %}">
+                        @{{ profile.user.username|lower }}
+                    </a>
+                </p>
+              <p class="card-text">
+                <small class="text-body-secondary">
+                  Last updated: {{ profile.date_modified }}
+                </small>
+              </p>
+            </div>
+          </div>
+        </div>
+    </div>
+    <br/><br/>
+    {% endfor %}
+
+{% endif %}
+
+{% endblock %}
