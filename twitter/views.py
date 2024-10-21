@@ -166,3 +166,17 @@ def follow(request, pk):
         return redirect(request.META.get("HTTP_REFERER"))
     else:
         return handle_unauthenticated_request(request)
+
+def delete_tweet(request,pk):
+    if request.user.is_authenticated:
+        tweet = get_object_or_404(Tweet, id=pk)
+        if request.user.username == tweet.user.username:
+            tweet.delete()
+            messages.error(request, "Successfully deleted the tweet!")
+            return redirect(request.META.get("HTTP_REFERER"))
+        else:
+            messages.error(request, "You can only delete your own tweets!")
+            return redirect('home')
+
+    else:
+        return handle_unauthenticated_request(request)
