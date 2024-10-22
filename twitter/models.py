@@ -8,6 +8,7 @@ class Tweet(models.Model):
     body = models.CharField(max_length=200)
     created_at = models.DateTimeField(auto_now_add=True)
     likes = models.ManyToManyField(User, related_name="tweet_like", blank=True)
+    is_edited = models.BooleanField(default=False)
     
     def number_of_likes(self):
         return self.likes.count()

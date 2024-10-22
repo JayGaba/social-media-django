@@ -172,11 +172,31 @@ def delete_tweet(request,pk):
         tweet = get_object_or_404(Tweet, id=pk)
         if request.user.username == tweet.user.username:
             tweet.delete()
-            messages.error(request, "Successfully deleted the tweet!")
+            messages.success(request, "Successfully deleted the tweet!")
             return redirect(request.META.get("HTTP_REFERER"))
         else:
             messages.error(request, "You can only delete your own tweets!")
             return redirect('home')
 
+    else:
+        return handle_unauthenticated_request(request)
+
+def edit_tweet(request, pk):
+    if request.user.is_authenticated:
+        tweet = get_object_or_404(Tweet, id=pk)
+        if request.user.username == tweet.user.username:
+            form = TweetForm(request.POST or None, instance=tweet)
+            if request.method == "POST" and form.is_valid():
+                tweet = form.save(commit=False)
+                tweet.user = request.user
+                tweet.is_edited = True
+                tweet.save()
+                messages.success(request, "Successfully updated your tweet!")
+                return redirect('home')
+            else:    
+                return render(request, "edit_tweet.html", {"form": form, "tweet": tweet})
+        else:
+            messages.error(request, "You can only edit your own tweets!")
+            return redirect('home')
     else:
         return handle_unauthenticated_request(request)

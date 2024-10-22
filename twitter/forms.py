@@ -9,7 +9,7 @@ class TweetForm(forms.ModelForm):
     
     class Meta:
         model=Tweet
-        exclude = ("user","likes",)
+        exclude = ("user","likes", "is_edited")
         
 class SignUpForm(UserCreationForm):
     email = forms.EmailField(label="", widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Email Address'}))
